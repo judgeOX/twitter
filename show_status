@@ -32,3 +32,4 @@ $data = json_decode($response->getBody());
 
 // 適当に出力
 print_r($data);
+
