@@ -1,0 +1,34 @@
+<?php
+// Pearライブラリの読み込み
+require_once "HTTP/OAuth/Consumer.php"; // 
+
+// OAuth key の設定 twitterのアプリdetailから取得
+define('CONFIG_CONSUMER_KEY', 'xxxxxxxxxx');
+define('CONFIG_CONSUMER_SECRET', 'xxxxxxxxxx');
+define('ACCESS_TOKEN', 'xxxxxxxxxx');
+define('ACCESS_TOKEN_SECRET', 'xxxxxxxxxx');
+
+// アクセストークンをクラスにセット
+$oauth = new HTTP_OAuth_Consumer(CONFIG_CONSUMER_KEY, CONFIG_CONSUMER_SECRET);
+$oauth->setToken(ACCESS_TOKEN);
+$oauth->setTokenSecret(ACCESS_TOKEN_SECRET);
+
+// APIのURL
+$api_url = "https://api.twitter.com/1.1/users/show.json";
+// パラメータの初期化
+$api_pram = array();
+
+// SSLでのリクエスト設定
+$http_request = new HTTP_Request2();
+$http_request->setConfig('ssl_verify_peer', false);
+$oauth_request = new HTTP_OAuth_Consumer_Request;
+$oauth_request->accept($http_request);
+$oauth->accept($oauth_request);
+
+// データ取得
+$api_pram['screen_name'] = "hogehoge";
+$response = $oauth->sendRequest($api_url, $api_pram, "GET");
+$data = json_decode($response->getBody());
+
+// 適当に出力
+print_r($data);
